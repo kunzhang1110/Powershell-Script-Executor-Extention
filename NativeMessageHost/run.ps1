@@ -4,4 +4,4 @@ param(
 
 
 $outDir ="$HOME\Downloads\%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s"
-& "C:\\Users\kunzh\\yt-dlp.exe"  -o $outDir $url 
+& "C:\\Users\\KZhang\\yt-dlp.exe" -o $outDir $url
