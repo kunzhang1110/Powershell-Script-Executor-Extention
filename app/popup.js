@@ -1,37 +1,34 @@
-window.onload = function() {
-  const powershellScriptPath = localStorage.getItem('powershellScriptPath');
+
+let powershellScriptPath = localStorage.getItem('powershellScriptPath') ?? "";
+
+window.onload = () => {
   if (powershellScriptPath) {
     document.getElementById('powershellScriptPathInput').textContent = powershellScriptPath;
     document.getElementById('powershellScriptPathInput').value = powershellScriptPath;
   }
 };
 
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  if (message.type === "fromBackground") {
-    console.log("Response from background:", message.content);
-    // document.getElementById("loadingSpinner").style.display = "none";
-    // document.getElementById("inputGroup").style.display = "block";
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log("Message from background:", message.content);
+  debugger;
 
-    document.getElementById("loadingSpinner").style.display = "none";
-    document.getElementById("inputGroup").style.visibility = "visible";
+  if (message.type === "fromBackground" && !message.error && powershellScriptPath !== "") {
+    localStorage.setItem('powershellScriptPath', powershellScriptPath);
   }
+  setLoadingSpinner(false);
 });
 
 document.getElementById("executeScript").addEventListener("click", () => {
   try {
-    // document.getElementById("loadingSpinner").style.display = "block";
-    // document.getElementById("inputGroup").style.display = "none";
-  
-    document.getElementById("loadingSpinner").style.display = "block";
-    document.getElementById("inputGroup").style.visibility = "hidden";
+    setLoadingSpinner(true);
+
 
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const currentUrl = tabs[0].url;
-      const powershellScriptPath = document.getElementById(
+      powershellScriptPath = document.getElementById(
         "powershellScriptPathInput"
       ).value;
 
-      localStorage.setItem('powershellScriptPath', powershellScriptPath);
 
       const content = {
         url: currentUrl,
@@ -47,6 +44,7 @@ document.getElementById("executeScript").addEventListener("click", () => {
     });
   } catch (error) {
     console.error("Error:", error);
+    setLoadingSpinner(false);
   }
 });
 
@@ -58,3 +56,16 @@ document.getElementById("restartBackground").addEventListener("click", () => {
     console.error("Error restarting the background script:", error);
   }
 });
+
+function setLoadingSpinner(shouldSpinnerShow) {
+  const loadingSpinner = document.getElementById("loadingSpinner");
+  const inputGroup = document.getElementById("inputGroup");
+  if (shouldSpinnerShow) {
+    loadingSpinner.style.display = "block";
+    inputGroup.style.visibility = "hidden";
+  } else {
+    loadingSpinner.style.display = "none";
+    inputGroup.style.visibility = "visible";
+  }
+
+}

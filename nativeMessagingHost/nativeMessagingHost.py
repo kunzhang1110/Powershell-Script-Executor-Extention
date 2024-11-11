@@ -3,6 +3,8 @@ import json
 import struct
 import subprocess
 
+defaultPowershellScriptPath = "C:\\Users\\KZhang\\Documents\\GitHub\\Powershell-Script-Executor-Extention\\powerShellScripts\\download_video.ps1"
+
 def getMessage():
     rawLength = sys.stdin.buffer.read(4)
     if len(rawLength) == 0:
@@ -25,25 +27,30 @@ def sendMessage(encodedMessage):
     sys.stdout.buffer.flush()
 
 
-def runPowerShellWithUrl(url,powershellScriptPath):
-    command = ["powershell", "-ExecutionPolicy", "Bypass", "-File", powershellScriptPath, "-url", url]
+def runPowerShellWithUrl(url, powershellScriptPath):
+    command = ["powershell", "-ExecutionPolicy", "Bypass",
+               "-File", powershellScriptPath, "-url", url]
     try:
-        subprocess.run(command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) # DEVNULL is crucial
+        subprocess.run(command, check=True, stdout=subprocess.DEVNULL,
+                       stderr=subprocess.DEVNULL)  # DEVNULL is crucial
     except Exception as e:
-        raise Exception("Error: " + str(e))
+        raise Exception(str(e))
     pass
-       
+
 
 while True:
     try:
-        receivedMessage = getMessage() 
+        receivedMessage = getMessage()
         url = receivedMessage["url"]
-        powershellScriptPath = receivedMessage.get("powershellScriptPath", "C:\\GitHub\\Sandbox\\powershell-script-executor\\NativeMessageHost\\run.ps1")
-        
+        powershellScriptPath = receivedMessage.get(
+            "powershellScriptPath", defaultPowershellScriptPath)
+        if powershellScriptPath == "":
+            powershellScriptPath = defaultPowershellScriptPath
+
         if url:
-            runPowerShellWithUrl(url,powershellScriptPath)
+            runPowerShellWithUrl(url, powershellScriptPath)
             sendMessage(encodeMessage(url))
+        else:
+            sendMessage(encodeMessage("Error: Invalid URL"))
     except Exception as e:
         sendMessage(encodeMessage("Error: " + str(e)))
-        break
-    

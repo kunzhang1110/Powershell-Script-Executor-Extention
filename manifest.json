@@ -8,10 +8,10 @@
     "32": "icons/play32x32.png"
   },
   "browser_action": {
-    "default_popup": "popup/popup.html"
+    "default_popup": "app/popup.html"
   },
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["app/background.js"],
     "persistent": false
   }
 }
