@@ -3,4 +3,7 @@ param(
     )
 
 $outDir ="$HOME\Downloads\%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s"
-& "C:\\Users\\KZhang\\yt-dlp.exe" -o $outDir $url
+
+$scriptDir = $PSScriptRoot
+$ytDlpPath = Join-Path -Path $scriptDir -ChildPath "yt-dlp.exe"
+& $ytDlpPath -o $outDir $url

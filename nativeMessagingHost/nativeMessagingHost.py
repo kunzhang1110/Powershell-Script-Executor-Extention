@@ -3,9 +3,9 @@ import json
 import struct
 import subprocess
 
-defaultPowershellScriptPath = "C:\\Users\\KZhang\\Documents\\GitHub\\Powershell-Script-Executor-Extention\\powerShellScripts\\download_video.ps1"
+defaultPowershellScriptPath = "C:\\Users\\KZhang\\Documents\\GitHub\\Powershell-Script-Executor-Extention\\nativeMessagingHost\\nativeMessagingHost.py"
 
-def getMessage():
+def getMessage() -> dict:
     rawLength = sys.stdin.buffer.read(4)
     if len(rawLength) == 0:
         sys.exit(0)
@@ -43,10 +43,9 @@ while True:
         receivedMessage = getMessage()
         url = receivedMessage["url"]
         powershellScriptPath = receivedMessage.get(
-            "powershellScriptPath", defaultPowershellScriptPath)
+            "powershellScriptPath", "")
         if powershellScriptPath == "":
             powershellScriptPath = defaultPowershellScriptPath
-
         if url:
             runPowerShellWithUrl(url, powershellScriptPath)
             sendMessage(encodeMessage(url))

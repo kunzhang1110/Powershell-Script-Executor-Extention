@@ -2,7 +2,7 @@
   "name": "PowerShell Executor",
   "manifest_version": 2,
   "version": "1.0",
-  "permissions": ["tabs", "activeTab", "nativeMessaging", "scripting"],
+  "permissions": ["tabs", "activeTab", "nativeMessaging"],
   "icons": {
     "16": "icons/play16x16.png",
     "32": "icons/play32x32.png"
