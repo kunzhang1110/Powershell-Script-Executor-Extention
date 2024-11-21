@@ -1,35 +1,41 @@
-let port, isConnected = false;
+let port;
 
-function connect() {
+// Listen for messages from popup.js and forward them to the native host
+chrome.runtime.onMessage.addListener((msgFromPopup, sender, sendResponse) => {
+  if (msgFromPopup.type === "fromPopup") {
+    // if port is not connected, connect to the native host
+    if (!port) connectToNativeHost(); 
+    
+    if (port) {
+      port.postMessage(msgFromPopup.content);
+    } else {
+      // if port connection fails, send a message to the popup.js
+      sendResponse({
+        type: "fromBackground",
+        content: "Port is not connected.",
+      });
+    }
+  }
+});
+
+function connectToNativeHost() {
   port = chrome.runtime.connectNative("kunzhang1110.powershellrunner");
-  isConnected = true;
+
+  // Listen for message from native host
+  port.onMessage.addListener((respFromNativeHost) => {
+    console.log("Received from NativeMessagingHost: " + respFromNativeHost);
+    let hasError = respFromNativeHost.startsWith("Error");
+    let msgToPopup = {
+      type: "fromBackground",
+      content: respFromNativeHost,
+      hasError,
+    };
+    chrome.runtime.sendMessage(msgToPopup);
+  });
+
+  // Listen for disconnection events
+  port.onDisconnect.addListener(() => {
+    console.log(`Port disconnected due to an error: ${port.error?.message}`);
+    port = null;
+  });
 }
-
-connect();
-
-port.onMessage.addListener((message) => {
-  console.log("Received from NativeMessagingHost: " + message);
-  let forwardMessage = { type: "fromBackground", content: message, error: false };
-  if (message.startsWith("Error")) {
-    forwardMessage.error = true;
-  }
-  chrome.runtime.sendMessage(forwardMessage);
-});
-
-port.onDisconnect.addListener((port) => {
-  if (port.error) {
-    console.log(`Port disconnected due to an error: ${port.error.message}`);
-  } else {
-    console.log(`Port Disconnected`);
-  }
-  isConnected = false;
-});
-
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  if ((message.type === "fromPopup") && isConnected) {
-    port.postMessage(message.content);
-  } else {
-    sendResponse({ type: "fromBackground", content: "Port is not connected." });
-  }
-
-});

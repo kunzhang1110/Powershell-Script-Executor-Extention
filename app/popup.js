@@ -1,27 +1,27 @@
-
-let powershellScriptPath = localStorage.getItem('powershellScriptPath') ?? "";
+let powershellScriptPath = localStorage.getItem("powershellScriptPath") ?? "";
 
 window.onload = () => {
-  if (powershellScriptPath) {
-    document.getElementById('powershellScriptPathInput').textContent = powershellScriptPath;
-    document.getElementById('powershellScriptPathInput').value = powershellScriptPath;
-  }
+  document.getElementById("powershellScriptPathInput").value =
+    powershellScriptPath ?? "";
 };
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log("Message from background:", message.content);
-  debugger;
-
-  if (message.type === "fromBackground" && !message.error && powershellScriptPath !== "") {
-    localStorage.setItem('powershellScriptPath', powershellScriptPath);
+chrome.runtime.onMessage.addListener(
+  (msgFromBackground, sender, sendResponse) => {
+    console.log("Message from background:", msgFromBackground.content);
+    if (
+      msgFromBackground.type === "fromBackground" &&
+      !msgFromBackground.hasError &&
+      powershellScriptPath !== ""
+    ) {
+      localStorage.setItem("powershellScriptPath", powershellScriptPath); // Save the path to local storage
+    }
+    setLoadingSpinner(false);
   }
-  setLoadingSpinner(false);
-});
+);
 
 document.getElementById("executeScript").addEventListener("click", () => {
   try {
     setLoadingSpinner(true);
-
 
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const currentUrl = tabs[0].url;
@@ -29,18 +29,15 @@ document.getElementById("executeScript").addEventListener("click", () => {
         "powershellScriptPathInput"
       ).value;
 
-
       const content = {
         url: currentUrl,
         powershellScriptPath: powershellScriptPath ?? "",
       };
 
-      chrome.runtime.sendMessage(
-        {
-          type: "fromPopup",
-          content: content,
-        }
-      );
+      chrome.runtime.sendMessage({
+        type: "fromPopup",
+        content,
+      });
     });
   } catch (error) {
     console.error("Error:", error);
@@ -67,5 +64,4 @@ function setLoadingSpinner(shouldSpinnerShow) {
     loadingSpinner.style.display = "none";
     inputGroup.style.visibility = "visible";
   }
-
 }
