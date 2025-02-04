@@ -1,9 +1,9 @@
 {
     "name": "kunzhang1110.powershellrunner",
     "description": "Runs PowerShell scripts from Edge extension",
-    "path": "C:\\Users\\KZhang\\Documents\\GitHub\\Powershell-Script-Executor-Extention\\nativeMessagingHost\\run.bat",
+    "path": "C:\\Users\\KZhang\\Documents\\GitHub\\Utilities\\Powershell-Script-Executor-Extention\\nativeMessagingHost\\run.bat",
     "type": "stdio",
     "allowed_origins": [
-        "chrome-extension://mfcnkmpcgclacngkagjlcgdapnaikomk/"
+        "chrome-extension://kkjemmkchedkjpfgfjjblachchjbcago/"
     ]
 }

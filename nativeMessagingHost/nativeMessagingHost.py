@@ -3,7 +3,7 @@ import json
 import struct
 import subprocess
 
-defaultPowershellScriptPath = "C:\\Users\\KZhang\\Documents\\GitHub\\Powershell-Script-Executor-Extention\\powerShellScripts\\download_video.ps1"
+defaultPowershellScriptPath = "C:\\Users\\KZhang\\Documents\\GitHub\\Utilities\\Powershell-Script-Executor-Extention\\powerShellScripts\\download_video.ps1"
 
 def getMessage() -> dict:
     rawLength = sys.stdin.buffer.read(4)

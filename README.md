@@ -3,8 +3,9 @@
 PowerShell Script Executor Extension is a Microsoft Edge extension
 designed to run local PowerShell scripts on Windows. It utilizes a
 Python script as the NativeMessagingHost, enabling seamless
-communication with the background thread of the extension. Currently,
-the extension can read the URL from an active tab and pass this
+communication with the background thread of the extension.
+
+The extension can read the URL from an active tab and pass this
 information to the PowerShell script for further processing.
 
 ## Usage
@@ -42,13 +43,13 @@ information to the PowerShell script for further processing.
     Path\To\Project\Powershell-Script-Executor-Extention\powerShellScripts\\
     download_video.ps1 "
 
-> When executed, this should download the video from the current tab
-> using yt-dlp.exe.
+    When executed, this should download the video from the current tab
+    using yt-dlp.exe.
 
 ## PowerShell Script
 
-> An example can be found at "C:
-> Path\To\Project\Powershell-Script-Executor-Extention\powerShellScripts\\
-> download_video.ps1 " Note that the script accepts a single parameter,
-> url, which corresponds to the URL of the tab where the user clicked
-> the "Execute" button.url which is the tab’s url.
+An example can be found at "C:
+Path\To\Project\Powershell-Script-Executor-Extention\powerShellScripts\\
+download_video.ps1 " Note that the script accepts a single parameter,
+url, which corresponds to the URL of the tab where the user clicked
+the "Execute" button.url which is the tab’s url.

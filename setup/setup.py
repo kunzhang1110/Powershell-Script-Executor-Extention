@@ -36,8 +36,8 @@ PY_PATH = DIR_PATH / "nativeMessagingHost.py"
 BAT_PATH = DIR_PATH / "run.bat"
 PS_PATH = Path.cwd() / "powerShellScripts" / "download_video.ps1"
 
-extension_id = "mfcnkmpcgclacngkagjlcgdapnaikomk"
-# extension_id = input("Enter the extension id: ")
+# extension_id = "mfcnkmpcgclacngkagjlcgdapnaikomk"
+extension_id = input("Enter the extension id: ")
 
 
 REG_REPLACE_PATTERN = r'(@=)"[^"]*"'
